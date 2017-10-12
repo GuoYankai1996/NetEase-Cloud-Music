@@ -10,21 +10,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import ip.IP;
 public class GetSongs {
 	static ConcurrentLinkedQueue<Song> songqueue=new ConcurrentLinkedQueue<Song>();
-	static ConcurrentLinkedQueue<IP> iplist=new ConcurrentLinkedQueue<IP>();
 	static volatile boolean temp=false;
 	static ConcurrentHashMap<Integer,Integer> repeat;
 	static ConcurrentLinkedQueue<Playlist> queue=new ConcurrentLinkedQueue<Playlist>();
 	public static void getSongs(){
-		try {
-			FileInputStream fi=new FileInputStream("ip");
-			ObjectInputStream in=new ObjectInputStream(fi);
-			while(in.available()>0){
-				iplist.add((IP)in.readObject());
-			}
-		} catch (IOException | ClassNotFoundException e3) {
-			// TODO Auto-generated catch block
-			e3.printStackTrace();
-		}
 		FileInputStream fi;
 		try {
 			fi = new FileInputStream("boolean");
@@ -68,13 +57,6 @@ public class GetSongs {
 		}else{
 			list(queue);
 			repeat=new ConcurrentHashMap<Integer,Integer>(10000);
-		}
-		for(int i=0;i<15;i++){
-			Thread a=new GetSongsThread(queue,songqueue);
-			a.start();
-		}
-		for(int m=0;m<3;m++){
-			new SongqueueThread(songqueue,queue).start();
 		}
 		
 	}
